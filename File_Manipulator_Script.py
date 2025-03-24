@@ -1,6 +1,22 @@
 import os
 import sys
 
+#Prompts the user for keyword, returns list
+def PromptKeyword():
+    keywordlist = []
+    index = 1
+    while True:
+        keyword = input(f"Keyword #{index} (or 'done' to finish): ").strip()
+        if keyword.lower() == 'done':
+            break
+        # Adds keyword to list
+        keywordlist.append(keyword)
+    
+    return keywordlist
+
+#def KeywordSearch(filepath):
+
+
 def main():
     # Printing Header
     print("=" * 60)
@@ -30,6 +46,11 @@ def main():
         if not os.path.exists(filepath):
             print(f"Error: Path not found: {filepath}")
             continue
+
+        # Validate filetype DEBUG
+        if not filepath.lower().endswith(('.txt', '.csv')):
+            print(f"Error: Incorrect filetype. Please only select .txt or .csv")
+            continue
         
         # Keeps record of all files accessed
         source_path.append(filepath)
@@ -40,7 +61,7 @@ def main():
         input("Press Enter to exit...")
         sys.exit(1)
     
-    # Prompting User to Identify which file they'd like to manipulate
+    # File Selection
     print("\n")
     print("=" * 60)
     print("\nBelow is the list of files you selected:\n")
@@ -48,7 +69,6 @@ def main():
     for index, value in enumerate(source_path):
         print(f"{index+1}. {value}")
     
-    # File Selection
     while True:
         try:
             inputvalue = int(input("\nPlease select the file you would like to manipulate: "))
@@ -89,6 +109,11 @@ def main():
         
         except ValueError:
             print("Error: Please enter a valid number.")
+
+    # Keyword Search
+    if inputaction is 1:
+        keyword_list = PromptKeyword()
+        
 
 if __name__ == "__main__":
     main()
