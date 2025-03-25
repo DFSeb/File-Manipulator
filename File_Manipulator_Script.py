@@ -14,7 +14,27 @@ def PromptKeyword():
     
     return keywordlist
 
-#def KeywordSearch(filepath):
+#Searches keyword across file; consider studying memory mapped file handling for future optomization/speed improvements
+def KeywordSearch(filepath, keywordlist):
+    # Prepare output filename 
+    file_name, file_ext = os.path.splitext(filepath)
+    output_filepath = f"{file_name}_keyword_matches{file_ext}"
+    
+    # Initialize counter for matched lines
+    matched_lines_count = 0
+    
+    # Open input and output files with efficient line-by-line reading
+    with open(filepath, 'r', encoding='utf-8', errors='ignore') as infile, \
+         open(output_filepath, 'w', encoding='utf-8') as outfile:
+        
+        # Process file line by line to handle large files efficiently
+        for line in infile:
+            # Check if any keyword is in the line (case-insensitive)
+            if any(keyword.lower() in line.lower() for keyword in keywordlist):
+                outfile.write(line)
+                matched_lines_count += 1
+    
+    return matched_lines_count
 
 
 def main():
@@ -110,9 +130,12 @@ def main():
         except ValueError:
             print("Error: Please enter a valid number.")
 
-    # Keyword Search
+    # Keyword Search **QC AND DEBUG THIS**
     if inputaction is 1:
         keyword_list = PromptKeyword()
+        matched_lines = KeywordSearch(selected_file, keyword_list)
+
+        print(f"{matched_lines} lines matched the keyword list. Please check the output file for results.")
         
 
 if __name__ == "__main__":
